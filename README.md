@@ -29,7 +29,7 @@
 
 ### Backend
 - **Node.js**, **Express.js**
-- **MySQL** with **Prisma ORM**
+- **PostgreSQL** with **Prisma ORM**
 
 ---
 
@@ -37,22 +37,32 @@
 
 ### Prerequisites
 - Node.js (https://nodejs.org/)
-- MySQL & MySQL Workbench
+- PostgreSQL
 
 ### Installation Steps
 
 ```bash
 npm install
 npx prisma generate
-npx prisma db push
+npx prisma migrate dev --name init
 npm run dev
 ```
+
+For a fresh PostgreSQL database, set `DATABASE_URL` in `.env` using a connection string such as:
+
+```env
+DATABASE_URL="postgresql://USER:PASSWORD@HOST:5432/DATABASE?schema=public"
+```
+
+Use `npx prisma migrate deploy` when applying committed migrations in a deployment environment.
 
 ### Environment Variables
 Create a `.env` file and add:
 - `DATABASE_URL`
-- `CLERK_API_KEYS`
-- `STRIPE_API_KEYS`
-- `UNSPLASH_ACCESS_KEY`
+- Clerk environment variables required by the application
+- `STRIPE_API_KEY`
+- `STRIPE_WEBHOOK_SECRET`
+- `NEXT_PUBLIC_UNSPLASH_ACCESS_KEY`
+- `NEXT_PUBLIC_APP_URL`
 
 ---
