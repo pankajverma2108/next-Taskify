@@ -1,6 +1,6 @@
 "use server"
 
-import { auth } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
 
 import { db } from "@/lib/db";
@@ -18,7 +18,7 @@ import { checkSubscription } from "@/lib/subscription";
 
 
 const handler = async (data: InputType): Promise<ReturnType> => {
-  const { userId, orgId } = auth();
+  const { userId, orgId } = await auth();
 
   if(!userId || !orgId) {
     return {

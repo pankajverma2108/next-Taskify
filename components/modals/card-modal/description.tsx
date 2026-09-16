@@ -5,9 +5,10 @@ import { AlignLeft } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useState, useRef, ElementRef } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { useEventListener, useOnClickOutside } from "usehooks-ts";
+import { useEventListener } from "usehooks-ts";
 
 import { useAction } from "@/hooks/use-action";
+import { useClickOutside } from "@/hooks/use-click-outside";
 import { updateCard } from "@/actions/update-card";
 import { CardWithList } from "@/types";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -48,7 +49,7 @@ export const Description = ({
   };
 
   useEventListener("keydown", onKeyDown);
-  useOnClickOutside(formRef, disableEditing);
+  useClickOutside(formRef, disableEditing);
 
   const { execute, fieldErrors } = useAction(updateCard, {
     onSuccess: (data) => {

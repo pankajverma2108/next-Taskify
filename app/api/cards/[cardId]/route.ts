@@ -1,14 +1,15 @@
-import { auth } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
 import { db } from "@/lib/db";
 
 export async function GET(
     req: Request,
-    { params }: { params: { cardId: string } }
+    { params }: { params: Promise<{ cardId: string }> }
 ) {
     try{
-        const { userId, orgId } = auth();
+        const { userId, orgId } = await auth();
+        const { cardId } = await params;
 
         if (!userId || !orgId) {
             return new NextResponse("Unauthorized", { status: 401 });
@@ -16,7 +17,7 @@ export async function GET(
 
         const card = await db.card.findUnique({
             where: {
-              id: params.cardId,
+              id: cardId,
               list: {
                 board: {
                   orgId,

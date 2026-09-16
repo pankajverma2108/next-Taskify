@@ -3,10 +3,11 @@
 import { toast } from "sonner";
 import { Plus, X } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
-import { useEventListener, useOnClickOutside } from "usehooks-ts";
+import { useEventListener } from "usehooks-ts";
 import { useState, useRef, ElementRef } from "react";
 
 import { useAction } from "@/hooks/use-action";
+import { useClickOutside } from "@/hooks/use-click-outside";
 import { Button } from "@/components/ui/button";
 import { createList } from "@/actions/create-list";
 import { FormInput } from "@/components/form/form-input";
@@ -52,7 +53,7 @@ export const ListForm = () => {
     };
 
     useEventListener("keydown", onKeyDown);
-    useOnClickOutside(formRef, disableEditing);
+    useClickOutside(formRef, disableEditing);
 
     const onSubmit = (formData: FormData) => {
     const title = formData.get("title") as string;

@@ -1,7 +1,7 @@
 "use client";
 
 import { toast } from "sonner";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { DragDropContext, Droppable } from "@hello-pangea/dnd";
 
 import { ListWithCards } from "@/types";
@@ -30,6 +30,12 @@ export const ListContainer = ({
     boardId,
 }: ListContainerProps) => {
     const [orderedData, setOrderedData] = useState(data);
+    const [previousData, setPreviousData] = useState(data);
+
+    if (data !== previousData) {
+      setPreviousData(data);
+      setOrderedData(data);
+    }
 
     const { execute: executeUpdateListOrder } = useAction(updateListOrder, {
       onSuccess: () => {
@@ -48,10 +54,6 @@ export const ListContainer = ({
         toast.error(error);
       },
     });
-
-    useEffect(() => {
-        setOrderedData(data);
-    }, [data]);
 
     const onDragEnd = (result: any) => {
         const { destination, source, type } = result;
