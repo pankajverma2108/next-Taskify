@@ -9,9 +9,10 @@ import {
   KeyboardEventHandler,
 } from "react";
 import { useParams } from "next/navigation";
-import { useOnClickOutside, useEventListener } from "usehooks-ts";
+import { useEventListener } from "usehooks-ts";
 
 import { useAction } from "@/hooks/use-action";
+import { useClickOutside } from "@/hooks/use-click-outside";
 import { createCard } from "@/actions/create-card";
 import { Button } from "@/components/ui/button";
 import { FormSubmit } from "@/components/form/form-submit";
@@ -49,7 +50,7 @@ export const CardForm = forwardRef<HTMLTextAreaElement, CardFormProps> (({
     }
   };
 
-  useOnClickOutside(formRef, disableEditing);
+  useClickOutside(formRef, disableEditing);
   useEventListener("keydown", onKeyDown);
 
   const onTextareakeyDown: KeyboardEventHandler<HTMLTextAreaElement> = (e) => {

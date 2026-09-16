@@ -1,6 +1,6 @@
 "use server";
 
-import { auth, currentUser } from "@clerk/nextjs";
+import { auth, currentUser } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
 import { ACTION, ENTITY_TYPE } from "@prisma/client";
 
@@ -15,7 +15,7 @@ import { absoluteUrl } from "@/lib/utils";
 import { stripe } from "@/lib/stripe";
 
 const handler = async (data: InputType): Promise<ReturnType> => {
-    const { userId, orgId } = auth();
+    const { userId, orgId } = await auth();
     const user = await currentUser();
 
     if (!userId || !orgId || !user) {

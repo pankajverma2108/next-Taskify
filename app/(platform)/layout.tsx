@@ -10,7 +10,7 @@ const PlatformLayout = ({
     children: React.ReactNode;
 }) => {
     return (
-        <ClerkProvider>
+        <ClerkProvider afterSignOutUrl="/">
             <QueryProvider>
               <Toaster />
               <ModalProvider />
