@@ -1,7 +1,5 @@
+import { Section, Text, VStack } from "@/components/neopop";
 import { Brand } from "@/components/brand";
-import { Section } from "@astryxdesign/core/Section";
-import { Text } from "@astryxdesign/core/Text";
-import { VStack } from "@astryxdesign/core/VStack";
 
 const ClerkLayout = ({ children }: { children: React.ReactNode }) => (
   <Section className="taskify-auth-stage min-h-dvh w-full" padding={6}>

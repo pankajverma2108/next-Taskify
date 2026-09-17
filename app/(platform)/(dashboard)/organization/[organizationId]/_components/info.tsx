@@ -1,13 +1,8 @@
 "use client";
 
+import { Avatar, Badge, HStack, Skeleton, Text, VStack } from "@/components/neopop";
 import { CreditCard } from "lucide-react";
 import { useOrganization } from "@clerk/nextjs";
-import { Avatar } from "@astryxdesign/core/Avatar";
-import { Badge } from "@astryxdesign/core/Badge";
-import { HStack } from "@astryxdesign/core/HStack";
-import { Skeleton } from "@astryxdesign/core/Skeleton";
-import { Text } from "@astryxdesign/core/Text";
-import { VStack } from "@astryxdesign/core/VStack";
 
 interface InfoProps {
   isPro: boolean;

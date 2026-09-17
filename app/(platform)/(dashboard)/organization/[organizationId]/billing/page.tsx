@@ -1,10 +1,7 @@
+import { Heading, Section, Text, VStack } from "@/components/neopop";
 import { checkSubscription } from "@/lib/subscription";
 import { Info } from "../_components/info";
 import { SubscriptionButton } from "./_components/subscription-button";
-import { Heading } from "@astryxdesign/core/Heading";
-import { Section } from "@astryxdesign/core/Section";
-import { Text } from "@astryxdesign/core/Text";
-import { VStack } from "@astryxdesign/core/VStack";
 
 const BillingPage = async () => {
     const isPro = await checkSubscription();

@@ -1,11 +1,9 @@
+import { Skeleton, Text, VStack } from "@/components/neopop";
 import { auth } from "@clerk/nextjs/server"
 import { redirect } from "next/navigation";
 
 import { db } from "@/lib/db";
 import { ActivityItem } from "@/components/activity-item";
-import { Skeleton } from "@astryxdesign/core/Skeleton";
-import { Text } from "@astryxdesign/core/Text";
-import { VStack } from "@astryxdesign/core/VStack";
 
 export const ActivityList = async () => {
     const { orgId } = await auth();

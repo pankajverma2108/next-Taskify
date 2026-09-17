@@ -1,0 +1,131 @@
+{
+  "version": 1,
+  "project": {
+    "name": "doto",
+    "productType": "collaborative task workspace",
+    "stack": [
+      "nextjs",
+      "react",
+      "shadcn",
+      "tailwind-v3"
+    ]
+  },
+  "sources": {
+    "tokens": [
+      "app/globals.css",
+      "components/neopop/neopop.css",
+      "components/neopop/tokens.ts"
+    ],
+    "components": [
+      "components/neopop",
+      "components/ui"
+    ],
+    "assets": [],
+    "instructions": [
+      "AGENTS.md",
+      "CLAUDE.md"
+    ]
+  },
+  "design": {
+    "colorMode": "dark",
+    "colors": {
+      "background": "#0D0D0D",
+      "surface": "#121212",
+      "raised": "#161616",
+      "affirmative": "#FFCB45",
+      "progress": "#3BFFAD",
+      "focus": "#3F6FD9",
+      "celebration": "#FF426F"
+    },
+    "typography": {
+      "body": "Gilroy role with DM Sans fallback until licensed files arrive",
+      "display": "Gilroy role with Space Grotesk fallback until licensed files arrive",
+      "editorial": "Cirka role with Cormorant Garamond fallback until licensed files arrive"
+    },
+    "spacing": { "base": "4px" },
+    "radius": { "default": "0px" },
+    "shadows": { "plunk": "3px 3px 0 semantic edge color" },
+    "motion": { "press": "120ms ease-in-out translate3d(3px, 3px, 0)" },
+    "density": "compact"
+  },
+  "components": {
+    "installed": [
+      "accordion",
+      "avatar",
+      "button",
+      "dialog",
+      "input",
+      "label",
+      "popover",
+      "separator",
+      "sheet",
+      "skeleton",
+      "textarea",
+      "tooltip"
+    ],
+    "preferredPrimitives": [
+      "radix-ui"
+    ],
+    "patterns": []
+  },
+  "constraints": {
+    "must": [
+      "Use the local components/neopop compatibility layer",
+      "Keep Taskify branding and affirmative momentum semantics",
+      "Preserve 3px 45-degree plunk geometry and 120ms press motion",
+      "Support keyboard focus, reduced motion, desktop and mobile"
+    ],
+    "avoid": [
+      "Do not add Astryx dependencies or imports",
+      "Do not hotlink CRED fonts or copy CRED brand artwork",
+      "Do not round NeoPOP surfaces"
+    ]
+  },
+  "decisions": [
+    {
+      "date": "2026-09-17",
+      "decision": "Replace Astryx with a Taskify-owned NeoPOP compatibility layer pinned to upstream commit 1f4b3d2.",
+      "reason": "Match the selected visual system while staying compatible with React 19 and Next.js 16."
+    },
+    {
+      "date": "2026-09-17",
+      "decision": "Use an affirmative momentum rail: yellow next move, blue active work, green progress, pink celebration.",
+      "reason": "Make NeoPOP product-specific to Taskify instead of copying CRED branding."
+    }
+  ],
+  "evidence": [
+    {
+      "fact": "components.installed",
+      "source": "components/ui"
+    },
+    {
+      "fact": "design.tokens",
+      "source": "app/globals.css"
+    },
+    {
+      "fact": "project.instructions",
+      "source": "AGENTS.md"
+    },
+    {
+      "fact": "project.instructions",
+      "source": "CLAUDE.md"
+    },
+    {
+      "fact": "project.stack:nextjs",
+      "source": "package.json"
+    },
+    {
+      "fact": "project.stack:react",
+      "source": "package.json"
+    },
+    {
+      "fact": "project.stack:shadcn",
+      "source": "components.json"
+    },
+    {
+      "fact": "project.stack:tailwind-v3",
+      "source": "package.json"
+    }
+  ],
+  "generatedAt": "2026-09-17T16:29:03.778Z"
+}

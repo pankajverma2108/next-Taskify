@@ -1,12 +1,8 @@
+import { HStack, Heading, Section, Text, VStack } from "@/components/neopop";
 import Link from "next/link";
 import Image from "next/image";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import { VStack } from "@astryxdesign/core/VStack";
-import { HStack } from "@astryxdesign/core/HStack";
-import { Heading } from "@astryxdesign/core/Heading";
-import { Text } from "@astryxdesign/core/Text";
-import { Section } from "@astryxdesign/core/Section";
 import { ArrowUpRight } from "lucide-react";
 import { db } from "@/lib/db";
 import { getAvailableCount } from "@/lib/org-limit";

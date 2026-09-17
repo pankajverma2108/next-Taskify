@@ -1,11 +1,9 @@
+import { Heading, Text, VStack } from "@/components/neopop";
 import { Suspense } from "react";
 
 import { ActivityList } from "./_components/activity-list";
 import { Info } from "../_components/info";
 import { checkSubscription } from "@/lib/subscription";
-import { Heading } from "@astryxdesign/core/Heading";
-import { Text } from "@astryxdesign/core/Text";
-import { VStack } from "@astryxdesign/core/VStack";
 
 const ActivityPage = async () => {
     const isPro = await checkSubscription();

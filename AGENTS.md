@@ -10,34 +10,15 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 ## Taskify continuity
 
-Read `.taskify-context/00-START-HERE.md` and `11-HANDOFF.md` before changes. Keep the decision log, implementation log, validation evidence and handoff current after every coherent batch. This local folder is Git-ignored; never store secrets in it. Astryx is the design-system authority. Taskify uses a custom cool dark theme; earlier warm/light-first plans are superseded.
+Read `.taskify-context/00-START-HERE.md` and `11-HANDOFF.md` before changes. Keep the decision log, implementation log, validation evidence and handoff current after every coherent batch. This local folder is Git-ignored; never store secrets in it.
 
-<!-- ASTRYX:START -->
-Astryx v0.6.2 · 90+ components
-CLI: run every command as `npx astryx <cmd>` (shown below as `astryx ...`).
+## Taskify NeoPOP design authority
 
-SETUP (once, in your app entry e.g. main.tsx) — without these, components render unstyled:
-  import "@astryxdesign/core/reset.css";
-  import "@astryxdesign/core/astryx.css";
+The local compatibility layer in `components/neopop/` and its tokens are the design-system authority. It is adapted from CRED's Apache-2.0 `@cred/neopop-web` source at pinned commit `1f4b3d2`, then modified for React 19, Next.js 16, keyboard access, desktop workspaces, and Taskify semantics. Keep the attribution in `THIRD_PARTY_NOTICES.md`.
 
-WORKFLOW — discover, don't guess. Before writing UI:
-1. `astryx build "<idea>"` — START HERE: returns a kit (closest [page] + [block]s + [component]s). No args = full playbook.
-2. `astryx template <name> [--skeleton]` — scaffold the [page]/[block]s it named, or study their layout. Templates are reference code.
-3. `astryx component <Name>` — props + examples for every component you use.
-
-RULES:
-- No <div> — components do all layout/spacing, page frame included.
-- Frame first: read `astryx docs layout` before writing any page or screen — page frame, region widths, breakpoint behavior.
-- Dense data = rows (Table, List/Item), never Card-wrapped list items; Card is for standalone widgets. Status = StatusDot/Token; Badge = counts only.
-- Custom styling: component props first; else Tailwind utilities backed by tokens (bg-surface, text-primary, rounded-lg) via tailwind-theme.css. No raw hex/px.
-- Tokens for every value (`astryx docs tokens`). Brand/accent belongs in the theme (`astryx theme list` / `theme add <slug>`, or `astryx theme template` for a custom one) — never override --color-* in :root.
-- SELF-CHECK before you finish: re-read the file and replace any style={{…}}, raw <div>/<span> layout, imported .css/@apply, or hardcoded/arbitrary value (e.g. bg-[#fff], p-[13px]) with the component or a token-backed utility. If unsure a component/prop exists, run `astryx component <Name>` / `astryx search "<thing>"`; don't hand-roll CSS.
-
-MORE CLI:
-  search "<query>"   find any component / hook / doc / template / block
-  component --list   90+ components by category
-  template --list    page + block recipes
-  docs <topic>       browser-support, cli-integrations, color, elevation, getting-started, icons, illustrations, internationalization, layout, migration, motion, principles, shape, spacing, styling-libraries, styling, theme, tokens, typography, working-with-ai
-  swizzle <Name>     eject component source for deep customization
-  upgrade --apply    run after any Astryx or integration dependency bump
-<!-- ASTRYX:END -->
+- Use `components/neopop` primitives before creating one-off controls or layout systems.
+- Preserve the exact NeoPOP foundations: `#0d0d0d`, sharp geometry, 3px/45-degree plunk edges, high-contrast state palettes, and 120ms press motion.
+- Taskify remains the brand. Use the affirmative momentum semantics: yellow for the next move, blue for active work/focus, green for progress, and pink for celebration.
+- Keep the experience dark-first, responsive, keyboard accessible, hydration-safe, and respectful of reduced motion.
+- Gilroy and Cirka are the target typography. Until licensed local files are supplied, use the declared fallback roles; never hotlink CRED's font CDN or copy CRED brand artwork.
+- Astryx is historical only. Do not add new Astryx dependencies, imports, generated themes, or component usage.

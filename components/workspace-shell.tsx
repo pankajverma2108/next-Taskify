@@ -1,14 +1,8 @@
 "use client";
 
+import { AppShell, Button, HStack, SideNav, SideNavHeading, SideNavItem, SideNavSection, Text, TopNav, VStack } from "@/components/neopop";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { AppShell } from "@astryxdesign/core/AppShell";
-import { SideNav, SideNavHeading, SideNavItem, SideNavSection } from "@astryxdesign/core/SideNav";
-import { TopNav } from "@astryxdesign/core/TopNav";
-import { HStack } from "@astryxdesign/core/HStack";
-import { VStack } from "@astryxdesign/core/VStack";
-import { Text } from "@astryxdesign/core/Text";
-import { Button } from "@astryxdesign/core/Button";
 import { Orbit, PanelsTopLeft, Activity, Settings2, CreditCard, ArrowUpRight, Sparkles } from "lucide-react";
 
 type Props = { children: React.ReactNode; orgId?: string; orgName?: string; boards?: { id: string; title: string }[]; account?: React.ReactNode; create?: React.ReactNode; demo?: boolean };

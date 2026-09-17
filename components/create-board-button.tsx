@@ -1,18 +1,10 @@
 "use client";
 
+import { Button, Dialog, DialogHeader, Grid, HStack, Layout, LayoutContent, LayoutFooter, SelectableCard, Text, TextInput, VStack } from "@/components/neopop";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Plus, WandSparkles } from "lucide-react";
-import { Button } from "@astryxdesign/core/Button";
-import { Dialog, DialogHeader } from "@astryxdesign/core/Dialog";
-import { Grid } from "@astryxdesign/core/Grid";
-import { HStack } from "@astryxdesign/core/HStack";
-import { Layout, LayoutContent, LayoutFooter } from "@astryxdesign/core/Layout";
-import { SelectableCard } from "@astryxdesign/core/SelectableCard";
-import { Text } from "@astryxdesign/core/Text";
-import { TextInput } from "@astryxdesign/core/TextInput";
-import { VStack } from "@astryxdesign/core/VStack";
 
 import { createBoard } from "@/actions/create-board";
 import { defaultImages } from "@/constants/images";

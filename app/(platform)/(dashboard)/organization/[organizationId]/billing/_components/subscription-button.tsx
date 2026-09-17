@@ -1,9 +1,9 @@
 "use client";
 
+import { Button } from "@/components/neopop";
 import { toast } from "sonner";
 
 import { useAction } from "@/hooks/use-action";
-import { Button } from "@astryxdesign/core/Button";
 import { stripeRedirect } from "@/actions/stripe-redirect";
 import { useProModal } from "@/hooks/use-pro-modal";
 
