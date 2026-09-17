@@ -14,7 +14,7 @@ An expressive, dark-first workspace where small teams can turn rough ideas into 
 ![React](https://img.shields.io/badge/React-19.3-0B111B?style=flat-square&logo=react&logoColor=8DCDFF)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.9-0B111B?style=flat-square&logo=typescript&logoColor=8DCDFF)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Prisma-0B111B?style=flat-square&logo=postgresql&logoColor=8DCDFF)
-![Astryx](https://img.shields.io/badge/Astryx-0.6.2-0C526A?style=flat-square)
+![NeoPOP](https://img.shields.io/badge/NeoPOP-Taskify-0D0D0D?style=flat-square)
 
 </div>
 
@@ -26,7 +26,7 @@ An expressive, dark-first workspace where small teams can turn rough ideas into 
 
 ![Taskify's dark interactive board with four project lanes](./public/readme/board-desktop.png)
 
-Taskify is a working project workspace built around a fast Kanban core. The current milestone replaces the original interface with a custom Astryx design system, a resilient board engine, and a public interactive demo that can be explored without an account or database writes.
+Taskify is a working project workspace built around a fast Kanban core. Its current interface is powered by a local Taskify NeoPOP compatibility layer, a resilient board engine, and a public interactive demo that can be explored without an account or database writes.
 
 | Move | What it feels like |
 | --- | --- |
@@ -47,17 +47,17 @@ Taskify is a working project workspace built around a fast Kanban core. The curr
 - Board and List modes, search, URL-backed task deep links, and responsive mobile navigation
 - Stripe subscription entry points and organization billing/settings surfaces
 - A local-only `/demo` experience with realistic data and zero persistence
-- A custom dark Astryx theme with reduced-motion support and semantic design tokens
+- A custom dark Taskify NeoPOP system with sharp geometry, semantic state colors, and reduced-motion support
 
 </details>
 
 <details>
 <summary><strong>What is intentionally next</strong></summary>
 
-- Assignees, due dates, labels, comments, and attachment metadata
-- Attachment UI and private Supabase Storage upload/download flows
-- Realtime presence and teammate cursors
-- Multi-client conflict tests, authorization adversarial tests, and performance traces
+- Assignees, due dates, labels, and comments remain deferred
+- Attachment UI with private Supabase Storage upload, download, and delete flows
+- Board/task Presence (cursors are intentionally deferred)
+- Dedicated two-browser conflict, reconnect, RLS, and storage-authorization proof
 
 </details>
 
@@ -109,18 +109,20 @@ flowchart LR
     Postgres -->|row-change triggers| Realtime[Private Supabase Realtime Broadcast]
     Clerk -->|session JWT| Realtime
     Realtime -->|board invalidation| Browser
-    Browser -. attachment UI next .-> Storage[Private Supabase Storage]
+    Browser -. attachment UI next .-> Storage[Private Supabase Storage bucket]
 ```
 
 | Layer | Choice | Why |
 | --- | --- | --- |
 | Product shell | Next.js 16 App Router + React 19 | Server rendering, colocated routes, and server-side mutation boundaries |
-| Visual language | Astryx 0.6.2 + custom Nocturne theme | Dense product UI with one deliberate token system |
+| Visual language | Taskify NeoPOP compatibility layer | CRED NeoPOP geometry adapted locally for React 19, Next.js 16, and Taskify semantics |
 | Identity | Clerk organizations | Existing team, invitation, and workspace model |
 | Data | Prisma 5 + PostgreSQL | Typed relations and transactional ordering |
-| Motion | `@hello-pangea/dnd` | Accessible drag primitives with clear handles |
+| Motion | `@hello-pangea/dnd` + CSS motion tokens | Accessible drag primitives, 120 ms press feedback, and reduced-motion support |
 | Billing | Stripe | Existing subscription and billing portal flow |
-| Collaboration | Supabase Realtime + Storage | Private live invalidation now; presence and attachment UI next |
+| Collaboration | Supabase Realtime + Storage | Private live invalidation now; Presence and attachment UI next |
+
+The local NeoPOP layer is adapted from CRED's Apache-2.0 `@cred/neopop-web` source at pinned commit `1f4b3d2`. Taskify keeps its own brand, copy, information architecture, and geometric compositions. Gilroy and Cirka are the target typography roles; until licensed local font files are supplied, the runtime uses DM Sans, Space Grotesk, and Cormorant Garamond fallbacks. Exact font parity is intentionally not claimed yet.
 
 ## Run It Locally
 
@@ -176,7 +178,7 @@ npm run dev          # development server
 npm run lint         # ESLint
 npm run typecheck    # TypeScript without emitting files
 npm run build        # optimized production build
-npm run theme:build  # compile the custom Astryx theme
+npm run db:seed      # seed a local database when needed
 npx supabase db push --dry-run --linked  # preview pending cloud migrations
 ```
 
@@ -186,11 +188,13 @@ npx supabase db push --dry-run --linked  # preview pending cloud migrations
 app/                    routes, layouts, marketing, demo, workspace surfaces
 actions/                authenticated server actions and board command boundary
 components/board/       board, list, task editor, and demo adapters
+components/neopop/      Taskify-owned NeoPOP primitives, tokens, and SSR style registry
 hooks/                  client collaboration and product hooks
 lib/board-model.ts      serializable board contract and pure move logic
 lib/board-data.ts       authorized Prisma board reader
 lib/supabase/           Clerk-token Supabase browser client
-theme/nocturne.ts       source of truth for the Taskify visual system
+.21st/                  local design context for UI work
+THIRD_PARTY_NOTICES.md  NeoPOP source attribution and license note
 prisma/                 PostgreSQL schema and migrations
 supabase/               private Realtime, Storage, and RLS configuration
 public/readme/          verified product captures used by this README
@@ -210,13 +214,14 @@ The current milestone passes:
 
 ## The Next Move
 
-The collaboration foundation is live. The next build slice expands what teammates can coordinate:
+The collaboration foundation is live. The remaining product slice expands what teammates can coordinate:
 
-1. Extend the Prisma model with task metadata and organization-safe membership relations.
-2. Add attachment metadata and the private upload/download product flow on the provisioned bucket.
-3. Add presence, teammate cursors, and intentional activity signals to private board channels.
-4. Prove two-browser conflict, reconnect, RLS, and storage-policy behavior end to end.
-5. Add accessibility automation, performance budgets, and hosted-environment verification.
+1. Add attachment metadata and resumable private upload, download, and delete UI on the provisioned bucket.
+2. Add board/task Presence to private channels; teammate cursors remain intentionally deferred.
+3. Prove two-user/outsider two-browser Broadcast, conflict, reconnect, RLS, and storage-policy behavior end to end.
+4. Add accessibility automation, performance budgets, and hosted-environment verification.
+
+Assignees, due dates, labels, and comments remain intentionally deferred until this collaboration slice is proven.
 
 ---
 
