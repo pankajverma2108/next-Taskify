@@ -43,6 +43,7 @@ Taskify is a working project workspace built around a fast Kanban core. The curr
 - Boards, lists, tasks, descriptions, ordering, deletion, and audit history
 - Cross-list and list-level drag with optimistic queues and rollback
 - Order-version conflict detection and serializable database transactions
+- Clerk-authenticated private Supabase Realtime invalidation with reconnect reconciliation
 - Board and List modes, search, URL-backed task deep links, and responsive mobile navigation
 - Stripe subscription entry points and organization billing/settings surfaces
 - A local-only `/demo` experience with realistic data and zero persistence
@@ -54,8 +55,8 @@ Taskify is a working project workspace built around a fast Kanban core. The curr
 <summary><strong>What is intentionally next</strong></summary>
 
 - Assignees, due dates, labels, comments, and attachment metadata
-- Private Supabase Storage uploads with signed access
-- Private Supabase Realtime channels for board invalidation and presence
+- Attachment UI and private Supabase Storage upload/download flows
+- Realtime presence and teammate cursors
 - Multi-client conflict tests, authorization adversarial tests, and performance traces
 
 </details>
@@ -105,8 +106,10 @@ flowchart LR
     Prisma --> Postgres[(PostgreSQL)]
     Actions --> Audit[Audit log]
 
-    Postgres -. next milestone .-> Realtime[Supabase Realtime Broadcast]
-    Browser -. signed private access .-> Storage[Supabase Storage]
+    Postgres -->|row-change triggers| Realtime[Private Supabase Realtime Broadcast]
+    Clerk -->|session JWT| Realtime
+    Realtime -->|board invalidation| Browser
+    Browser -. attachment UI next .-> Storage[Private Supabase Storage]
 ```
 
 | Layer | Choice | Why |
@@ -117,7 +120,7 @@ flowchart LR
 | Data | Prisma 5 + PostgreSQL | Typed relations and transactional ordering |
 | Motion | `@hello-pangea/dnd` | Accessible drag primitives with clear handles |
 | Billing | Stripe | Existing subscription and billing portal flow |
-| Collaboration path | Supabase Realtime + Storage | Private live invalidation, presence, and attachments |
+| Collaboration | Supabase Realtime + Storage | Private live invalidation now; presence and attachment UI next |
 
 ## Run It Locally
 
@@ -127,6 +130,7 @@ flowchart LR
 - npm
 - PostgreSQL
 - Clerk application credentials
+- Supabase project URL and publishable key
 
 ### 2. Install
 
@@ -148,9 +152,9 @@ Copy `.env.example` to `.env` and fill the values you use:
 | `STRIPE_API_KEY` | Subscription checkout and portal |
 | `STRIPE_WEBHOOK_SECRET` | Stripe webhook verification |
 | `NEXT_PUBLIC_UNSPLASH_ACCESS_KEY` | Optional board-cover discovery |
-| `NEXT_PUBLIC_SUPABASE_URL` | Planned Realtime and Storage client |
-| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Planned public Supabase client access |
-| `SUPABASE_SECRET_KEY` | Future server-only signed storage operations |
+| `NEXT_PUBLIC_SUPABASE_URL` | Realtime and Storage client |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Browser-safe Supabase project access |
+| `SUPABASE_PROJECT_REF` | Optional Supabase CLI project linkage |
 | `NEXT_PUBLIC_APP_URL` | Redirect and application URLs |
 
 Never commit `.env` files or service-role credentials.
@@ -173,6 +177,7 @@ npm run lint         # ESLint
 npm run typecheck    # TypeScript without emitting files
 npm run build        # optimized production build
 npm run theme:build  # compile the custom Astryx theme
+npx supabase db push --dry-run --linked  # preview pending cloud migrations
 ```
 
 ## Project Map
@@ -181,10 +186,13 @@ npm run theme:build  # compile the custom Astryx theme
 app/                    routes, layouts, marketing, demo, workspace surfaces
 actions/                authenticated server actions and board command boundary
 components/board/       board, list, task editor, and demo adapters
+hooks/                  client collaboration and product hooks
 lib/board-model.ts      serializable board contract and pure move logic
 lib/board-data.ts       authorized Prisma board reader
+lib/supabase/           Clerk-token Supabase browser client
 theme/nocturne.ts       source of truth for the Taskify visual system
 prisma/                 PostgreSQL schema and migrations
+supabase/               private Realtime, Storage, and RLS configuration
 public/readme/          verified product captures used by this README
 ```
 
@@ -195,19 +203,20 @@ The current milestone passes:
 - ESLint
 - TypeScript type checking
 - Next.js production build
+- Supabase database lint and linked migration parity
 - Production dependency audit with zero known vulnerabilities
 - Desktop and mobile browser inspection
 - Search, view switching, task create/edit, and cross-list pointer drag flows
 
 ## The Next Move
 
-The next build slice adds the collaboration layer without replacing the working core:
+The collaboration foundation is live. The next build slice expands what teammates can coordinate:
 
 1. Extend the Prisma model with task metadata and organization-safe membership relations.
-2. Connect Clerk session tokens to Supabase Third-Party Auth.
-3. Add private per-board Realtime Broadcast channels for invalidation and presence.
-4. Add a private attachment bucket with signed upload/download access.
-5. Prove the system with two-browser conflict, reconnect, RLS, and storage-policy tests.
+2. Add attachment metadata and the private upload/download product flow on the provisioned bucket.
+3. Add presence, teammate cursors, and intentional activity signals to private board channels.
+4. Prove two-browser conflict, reconnect, RLS, and storage-policy behavior end to end.
+5. Add accessibility automation, performance budgets, and hosted-environment verification.
 
 ---
 

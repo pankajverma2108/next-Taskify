@@ -15,20 +15,37 @@ import { TextArea } from "@astryxdesign/core/TextArea";
 import { Dialog } from "@astryxdesign/core/Dialog";
 import { Selector } from "@astryxdesign/core/Selector";
 import { Token } from "@astryxdesign/core/Token";
+import { StatusDot } from "@astryxdesign/core/StatusDot";
 import { LayoutGrid, List, Search, Plus, X, GripVertical, AlignLeft, ArrowUpRight, RotateCcw, Check, Pencil, Trash2 } from "lucide-react";
 import { BoardCommand, BoardData, BoardLane, BoardResult, BoardTask, moveInBoard, orderVersion } from "@/lib/board-model";
+import { BoardRealtimeStatus, useBoardRealtime } from "@/hooks/use-board-realtime";
 
 type Props = {
   initial: BoardData;
   demo?: boolean;
   mutate: (command: BoardCommand, version: string) => Promise<BoardResult>;
+  orgId?: string;
   refresh?: () => Promise<BoardResult>;
   options?: React.ReactNode;
 };
 
 type Composer = { kind: "task"; listId: string } | { kind: "list" } | { kind: "rename-list"; listId: string; title: string } | { kind: "rename-board"; title: string };
 
-export function BoardWorkspace({ initial, demo = false, mutate, refresh, options }: Props) {
+const realtimeLabels: Record<BoardRealtimeStatus, { label: string; variant: "success" | "warning" | "neutral" }> = {
+  connecting: { label: "Connecting live sync", variant: "warning" },
+  live: { label: "Live sync", variant: "success" },
+  offline: { label: "Live sync paused", variant: "warning" },
+  unavailable: { label: "Live sync unavailable", variant: "neutral" },
+};
+
+function BoardRealtimeIndicator({ boardId, onInvalidate, orgId }: { boardId: string; onInvalidate: () => void | Promise<void>; orgId: string }) {
+  const status = useBoardRealtime({ boardId, onInvalidate, orgId });
+  const realtime = realtimeLabels[status];
+
+  return <HStack gap={2}><StatusDot variant={realtime.variant} label={realtime.label} isPulsing={status === "connecting"} /><Text type="supporting" color="secondary">{realtime.label}</Text></HStack>;
+}
+
+export function BoardWorkspace({ initial, demo = false, mutate, orgId, refresh, options }: Props) {
   const params = useSearchParams();
   const view = params.get("view") === "list" ? "list" : "board";
   const search = params.get("q") ?? "";
@@ -167,6 +184,7 @@ export function BoardWorkspace({ initial, demo = false, mutate, refresh, options
           <HStack gap={1}><Button label="Board" icon={<LayoutGrid className="size-4" />} variant={view === "board" ? "secondary" : "ghost"} aria-pressed={view === "board"} onClick={() => updateUrl({ view: null })} /><Button label="List" icon={<List className="size-4" />} variant={view === "list" ? "secondary" : "ghost"} aria-pressed={view === "list"} onClick={() => updateUrl({ view: "list" })} /></HStack>
           <HStack gap={3} wrap="wrap"><TextInput label="Search tasks" isLabelHidden placeholder="Find a task..." startIcon={<Search className="size-4" />} value={search} onChange={value => updateUrl({ q: value || null })} hasClear width={240} />
             <Text type="supporting" role="status" aria-live="polite">{busy ? "Saving changes..." : demo ? "Demo / changes stay in this tab" : "Changes saved"}</Text>
+            {!demo && orgId && refresh && <BoardRealtimeIndicator boardId={initial.id} orgId={orgId} onInvalidate={reload} />}
             {refresh && <IconButton label="Refresh board" icon={<RotateCcw className="size-4" />} onClick={() => void reload()} isDisabled={busy} variant="ghost" />}
           </HStack>
         </HStack>

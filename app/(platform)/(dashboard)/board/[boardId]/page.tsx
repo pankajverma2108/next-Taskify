@@ -12,5 +12,5 @@ export default async function BoardPage({ params }: { params: Promise<{ boardId:
   const { boardId } = await params;
   const board = await db.board.findFirst({ where: { id: boardId, orgId }, select: boardSelect });
   if (!board) notFound();
-  return <Suspense fallback={<Text>Opening your project...</Text>}><ConnectedBoard initial={serializeBoard(board)} /></Suspense>;
+  return <Suspense fallback={<Text>Opening your project...</Text>}><ConnectedBoard initial={serializeBoard(board)} orgId={orgId} /></Suspense>;
 }
