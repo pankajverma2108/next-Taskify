@@ -38,9 +38,9 @@
       "celebration": "#FF426F"
     },
     "typography": {
-      "body": "Gilroy role with DM Sans fallback until licensed files arrive",
-      "display": "Gilroy role with Space Grotesk fallback until licensed files arrive",
-      "editorial": "Cirka role with Cormorant Garamond fallback until licensed files arrive"
+      "body": "Gilroy role with Urbanist variable fallback until licensed files arrive",
+      "display": "Gilroy role with Urbanist variable fallback until licensed files arrive",
+      "editorial": "Cirka role with Libre Bodoni variable fallback until licensed files arrive"
     },
     "spacing": { "base": "4px" },
     "radius": { "default": "0px" },
@@ -91,6 +91,11 @@
       "date": "2026-09-17",
       "decision": "Use an affirmative momentum rail: yellow next move, blue active work, green progress, pink celebration.",
       "reason": "Make NeoPOP product-specific to Taskify instead of copying CRED branding."
+    },
+    {
+      "date": "2026-09-18",
+      "decision": "Use Urbanist for Gilroy roles and Libre Bodoni for Cirka roles until licensed local font files are supplied.",
+      "reason": "Match the migration typography contract closely without redistributing commercial font binaries in a public repository."
     }
   ],
   "evidence": [

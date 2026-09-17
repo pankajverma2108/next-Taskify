@@ -9,7 +9,7 @@
 
 html { color-scheme: dark; }
 html, body { min-height: 100%; }
-body { background: var(--color-background-body); color: var(--color-text-primary); margin: 0; }
+body { background: var(--color-background-body); color: var(--color-text-primary); font-family: var(--font-body); margin: 0; }
 * { border-color: var(--color-border); }
 ::selection { background: var(--np-yellow); color: var(--np-black-500); }
 
