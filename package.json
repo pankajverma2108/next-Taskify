@@ -3,10 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "engines": {
-    "node": ">=24.0.0 <27"
+    "node": ">=24.0.0 <25"
   },
   "scripts": {
-    "dev": "next dev",
+    "dev": "npm run dev:check && next dev --port 3000",
+    "dev:check": "node scripts/check-dev-environment.mjs",
+    "dev:webpack": "npm run dev:check && next dev --webpack --port 3000",
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",

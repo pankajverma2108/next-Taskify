@@ -61,6 +61,28 @@ Taskify is a working project workspace built around a fast Kanban core. Its curr
 
 </details>
 
+## Designed For Momentum
+
+Taskify's visual system is a local React 19-compatible adaptation of NeoPOP rather than a theme layered over generic controls. The interface uses a `#0D0D0D` canvas, sharp zero-radius surfaces, 3 px / 45-degree plunk edges, 120 ms press motion, visible keyboard focus, and reduced-motion fallbacks.
+
+| Product state | Visual role |
+| --- | --- |
+| **Next move** | Yellow marks the primary action and immediate opportunity. |
+| **Active work** | Blue carries focus, selection, and work in motion. |
+| **Progress** | Green confirms healthy, live, and completed states. |
+| **Celebration** | Pink is reserved for meaningful milestones. |
+| **Failure** | Red is reserved for destructive actions and explicit errors. |
+
+The component authority lives in `components/neopop/`; product compositions live in `app/globals.css`. CRED's Apache-2.0 source is pinned and attributed in `THIRD_PARTY_NOTICES.md`. Taskify keeps its own brand, copy, information architecture, and geometry.
+
+| Typography role | Runtime face | Use |
+| --- | --- | --- |
+| **UI and body** | Urbanist variable, standing in for Gilroy | Navigation, controls, dense board content, and long-form copy |
+| **Display** | Urbanist variable, standing in for Gilroy | Product headings with compact tracking and strong weight |
+| **Editorial display** | Libre Bodoni variable, standing in for Cirka | Oversized campaign and marketing statements |
+
+The role mapping follows the shared Phase V-0 NeoPOP foundations contract. Gilroy and Cirka remain the target faces, but their commercial binaries are not redistributed in this public repository. Urbanist and Libre Bodoni provide license-safe, locally self-hosted Next.js fallbacks until licensed webfont files are supplied.
+
 ## Built To Move
 
 The board does not pretend a request succeeded. Every mutation travels through one authenticated command boundary, checks workspace ownership, validates the expected ordering version, and returns a canonical board snapshot.
@@ -122,25 +144,37 @@ flowchart LR
 | Billing | Stripe | Existing subscription and billing portal flow |
 | Collaboration | Supabase Realtime + Storage | Private live invalidation now; Presence and attachment UI next |
 
-The local NeoPOP layer is adapted from CRED's Apache-2.0 `@cred/neopop-web` source at pinned commit `1f4b3d2`. Taskify keeps its own brand, copy, information architecture, and geometric compositions. Gilroy and Cirka are the target typography roles; until licensed local font files are supplied, the runtime uses DM Sans, Space Grotesk, and Cormorant Garamond fallbacks. Exact font parity is intentionally not claimed yet.
+The local NeoPOP layer is adapted from CRED's Apache-2.0 `@cred/neopop-web` source at pinned commit `1f4b3d2`. Taskify keeps its own brand, copy, information architecture, and geometric compositions. Gilroy and Cirka are the target typography roles; until licensed local font files are supplied, the runtime uses Urbanist and Libre Bodoni fallbacks. Exact font parity is intentionally not claimed yet.
 
 ## Run It Locally
 
 ### 1. Prerequisites
 
-- Node.js `>=24 <27`
+- [Node.js 24 LTS](https://nodejs.org/en/about/previous-releases) (`24.19.0` for this checkout)
 - npm
 - PostgreSQL
 - Clerk application credentials
 - Supabase project URL and publishable key
 
+The supported runtime is pinned to Node `24.19.0` in `.nvmrc` and `.node-version`, with the allowed LTS major enforced by `package.json`. `engine-strict=true` prevents installing dependencies under the wrong major version. On Windows, use `fnm` side-by-side instead of uninstalling a machine-wide Node version: switching applies to the current shell, so existing projects and their installed packages remain untouched.
+
 ### 2. Install
 
-```bash
+```powershell
 git clone https://github.com/pankajverma2108/next-Taskify.git
 cd next-Taskify
+
+winget install --id Schniz.fnm --exact
+# Reopen PowerShell once after the first fnm installation.
+fnm env --shell powershell | Out-String | Invoke-Expression
+fnm install 24.19.0
+fnm use 24.19.0
+
+node --version  # must print v24.19.0
 npm install
 ```
+
+The machine-wide Node installation is not downgraded. Open a separate terminal or run `fnm use system` when another project needs the existing system runtime.
 
 ### 3. Configure
 
@@ -169,18 +203,35 @@ npx prisma migrate dev
 npm run dev
 ```
 
+`npm run dev` runs a development preflight before starting Next.js. It requires Node 24, at least 1 GiB of free physical memory, and an available port 3000. It then starts exactly one compiler on `http://localhost:3000`; it will not silently create a second server on port 3001.
+
 Open `http://localhost:3000/demo` for the zero-write interactive board, or create an account to use a database-backed workspace.
 
 ## Useful Commands
 
 ```bash
-npm run dev          # development server
+npm run dev          # guarded Turbopack development server on port 3000
+npm run dev:check    # run the Node, memory, and port preflight only
+npm run dev:webpack  # guarded Webpack fallback for Turbopack-specific diagnosis
 npm run lint         # ESLint
 npm run typecheck    # TypeScript without emitting files
 npm run build        # optimized production build
 npm run db:seed      # seed a local database when needed
 npx supabase db push --dry-run --linked  # preview pending cloud migrations
 ```
+
+### Development server troubleshooting
+
+If the preflight reports that port 3000 is occupied, an earlier dev server is still running. Inspect the listener before stopping anything:
+
+```powershell
+Get-NetTCPConnection -LocalPort 3000 -State Listen | Select-Object OwningProcess
+Get-CimInstance Win32_Process -Filter "ProcessId=<PID>" | Select-Object ProcessId,CommandLine
+```
+
+Stop only the process you recognize, then rerun `npm run dev`. If the preflight reports low memory, close stale dev servers, browser automation, or other memory-heavy tools first. A PostCSS/Turbopack message that says `Node.js subprocess crashed` after a V8 out-of-memory error means the loader worker died; it does not by itself prove that `app/globals.css` is invalid.
+
+Use `npm run dev:webpack` only after Node, memory, and port checks pass. It is a diagnostic fallback, not a reason to leave duplicate servers running. `TASKIFY_ALLOW_LOW_MEMORY=1` bypasses only the 1 GiB guard and should be used only when the OOM risk is understood.
 
 ## Project Map
 
@@ -190,6 +241,7 @@ actions/                authenticated server actions and board command boundary
 components/board/       board, list, task editor, and demo adapters
 components/neopop/      Taskify-owned NeoPOP primitives, tokens, and SSR style registry
 hooks/                  client collaboration and product hooks
+scripts/                development runtime and resource preflight checks
 lib/board-model.ts      serializable board contract and pure move logic
 lib/board-data.ts       authorized Prisma board reader
 lib/supabase/           Clerk-token Supabase browser client
@@ -211,6 +263,7 @@ The current milestone passes:
 - Production dependency audit with zero known vulnerabilities
 - Desktop and mobile browser inspection
 - Search, view switching, task create/edit, and cross-list pointer drag flows
+- Guarded single-server development compilation on Node 24 LTS
 
 ## The Next Move
 

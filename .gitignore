@@ -41,3 +41,6 @@ next-env.d.ts
 /.taskify-context/
 /output/
 /.playwright-cli/
+
+# Portable local design playbook (copy into other projects as needed)
+/NEOPOP_DESIGN_SYSTEM_INSTRUCTIONS.md
