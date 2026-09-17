@@ -1,54 +1,16 @@
+import { Suspense } from "react";
 import { auth } from "@clerk/nextjs/server";
-import { redirect } from "next/navigation";
-
+import { notFound } from "next/navigation";
 import { db } from "@/lib/db";
+import { boardSelect, serializeBoard } from "@/lib/board-data";
+import { ConnectedBoard } from "@/components/board/connected-board";
+import { Text } from "@astryxdesign/core/Text";
 
-import { ListContainer } from "./_components/list-container";
-
-interface BoardIdPageProps {
-    params: Promise<{
-      boardId: string;
-    }>;
-};
-
-const BoardIdPage = async ({
-    params,
-}: BoardIdPageProps) => {
-    const { orgId } = await auth();
-    const { boardId } = await params;
-
-    if (!orgId) {
-        redirect("/select-org");
-    }
-
-    const lists = await db.list.findMany({
-        where: {
-            boardId,
-            board: {
-              orgId,
-            },
-        },
-        include: {
-            cards: {
-              orderBy: {
-                order: "asc",
-              },
-            },
-        },
-
-        orderBy: {
-            order: "asc",
-        },
-    });
-
-    return (
-        <div className="p-4 h-full overflow-x-auto">
-            <ListContainer
-              boardId={boardId}
-              data={lists}
-            />
-        </div>
-    );
-};
-
-export default BoardIdPage;
+export default async function BoardPage({ params }: { params: Promise<{ boardId: string }> }) {
+  const { orgId } = await auth();
+  if (!orgId) notFound();
+  const { boardId } = await params;
+  const board = await db.board.findFirst({ where: { id: boardId, orgId }, select: boardSelect });
+  if (!board) notFound();
+  return <Suspense fallback={<Text>Opening your project...</Text>}><ConnectedBoard initial={serializeBoard(board)} /></Suspense>;
+}

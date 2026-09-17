@@ -1,91 +1,29 @@
 import Link from "next/link";
+import Image from "next/image";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import { HelpCircle, User2 } from "lucide-react";
-
+import { VStack } from "@astryxdesign/core/VStack";
+import { HStack } from "@astryxdesign/core/HStack";
+import { Heading } from "@astryxdesign/core/Heading";
+import { Text } from "@astryxdesign/core/Text";
+import { Section } from "@astryxdesign/core/Section";
+import { ArrowUpRight } from "lucide-react";
 import { db } from "@/lib/db";
-import { Hint } from "@/components/hint";
-import { Skeleton } from "@/components/ui/skeleton";
-import { FormPopover } from "@/components/form/form-popver";
-import { MAX_FREE_BOARDS } from "@/constants/boards";
 import { getAvailableCount } from "@/lib/org-limit";
 import { checkSubscription } from "@/lib/subscription";
+import { MAX_FREE_BOARDS } from "@/constants/boards";
+import { CreateBoardButton } from "@/components/create-board-button";
 
-export const BoardList = async () => {
-    const { orgId } = await auth();
-
-    if (!orgId) {
-        return redirect("/select-org");
-    }
-
-    const boards = await db.board.findMany({
-        where: {
-          orgId,
-        },
-        orderBy: {
-          createdAt: "desc"
-        }
-    });
-
-    const availableCount = await getAvailableCount();
-    const isPro = await checkSubscription();
-
-    return (
-        <div className="space-y-4">
-            <div className="flex items-center font-semibold text-lg text-neutral-700">
-                <User2 className="h-6 w-6 mr-2" />
-                Your boards
-            </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-             {boards.map((board) => (
-                <Link 
-                key={board.id}
-                href={`/board/${board.id}`}
-                className="group relative aspect-video bg-no-repeat bg-center bg-cover bg-sky-700 rounded-sm h-full w-full p-2 overflow-hidden"
-                style={{ backgroundImage: `url(${board.imageThumbUrl})` }}
-                >
-                    <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition"/>
-                    <p className="relative font-semibold text-white">
-                        {board.title}
-                    </p>
-                </Link>
-             ))}
-             <FormPopover sideOffset={10} side="right">
-             <div
-              role="button"
-              className="aspect-video relative h-full w-full bg-muted rounded-sm flex flex-col gap-y-1 items-center justify-center hover:opacity-75 transition"
-            >
-                <p className="text-sm">Create new board</p>
-                <span className="text-xs">
-                  {isPro ? "Unlimited" : `${MAX_FREE_BOARDS - availableCount} remaining`}
-                </span>
-                <Hint
-                 sideOffset={40}
-                 description={`
-                   Free Workspaces can have up to 5 open boards. For unlimited boards upgrade this workspace.`}
-                 >
-                 <HelpCircle
-                   className="absolute bottom-2 right-2 h-[14px] w-[14px]"
-                 />
-                </Hint>
-            </div>
-            </FormPopover>
-            </div>
-        </div>
-    );
-};
-
-BoardList.Skeleton = function SkeletonBoardList() {
-    return (
-        <div className="grid gird-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-            <Skeleton className="aspect-video h-full w-full p-2" />
-            <Skeleton className="aspect-video h-full w-full p-2" />
-            <Skeleton className="aspect-video h-full w-full p-2" />
-            <Skeleton className="aspect-video h-full w-full p-2" />
-            <Skeleton className="aspect-video h-full w-full p-2" />
-            <Skeleton className="aspect-video h-full w-full p-2" />
-            <Skeleton className="aspect-video h-full w-full p-2" />
-            <Skeleton className="aspect-video h-full w-full p-2" />
-        </div>
-    );
-};
+export async function BoardList() {
+  const { orgId } = await auth();
+  if (!orgId) redirect("/select-org");
+  const [boards, used, isPro] = await Promise.all([
+    db.board.findMany({ where: { orgId }, orderBy: { updatedAt: "desc" }, include: { _count: { select: { lists: true } } } }),
+    getAvailableCount(), checkSubscription(),
+  ]);
+  return <VStack gap={4}><HStack justify="between" wrap="wrap" gap={3}><Heading level={2}>Your projects</Heading><Text color="secondary">{isPro ? "Unlimited projects" : `${Math.max(0, MAX_FREE_BOARDS - used)} free projects remaining`}</Text></HStack><Section className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
+    {boards.map(board => <Link key={board.id} href={`/board/${board.id}`} className="rounded-lg border border-border overflow-hidden bg-card group focus-visible:outline focus-visible:outline-2 focus-visible:outline-ring"><Image src={board.imageThumbUrl} alt="" width={600} height={280} className="w-full h-40 object-cover" /><VStack padding={5} gap={3}><HStack justify="between"><Heading level={3}>{board.title}</Heading><ArrowUpRight className="size-5 text-primary" /></HStack><Text color="secondary">{board._count.lists} lists / Open project</Text></VStack></Link>)}
+    {!boards.length && <VStack gap={4} padding={6}><Heading level={3}>Your first project starts here.</Heading><Text color="secondary">Create a board, add a few lists, and get the ideas moving.</Text><CreateBoardButton /></VStack>}
+  </Section></VStack>;
+}
+BoardList.Skeleton = function BoardListSkeleton() { return <Text role="status">Loading your projects...</Text>; };

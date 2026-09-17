@@ -35,3 +35,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Local project context and agent handoffs
+/.visual-mission-playbook/
+/.taskify-context/
+/output/
+/.playwright-cli/

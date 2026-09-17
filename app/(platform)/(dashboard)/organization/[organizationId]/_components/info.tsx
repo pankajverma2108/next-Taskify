@@ -1,9 +1,13 @@
 "use client";
 
-import Image from "next/image";
 import { CreditCard } from "lucide-react";
 import { useOrganization } from "@clerk/nextjs";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Avatar } from "@astryxdesign/core/Avatar";
+import { Badge } from "@astryxdesign/core/Badge";
+import { HStack } from "@astryxdesign/core/HStack";
+import { Skeleton } from "@astryxdesign/core/Skeleton";
+import { Text } from "@astryxdesign/core/Text";
+import { VStack } from "@astryxdesign/core/VStack";
 
 interface InfoProps {
   isPro: boolean;
@@ -23,41 +27,21 @@ const { organization, isLoaded } = useOrganization();
     }
 
     return (
-        <div className="flex items-center gap-x-4">
-            <div className="w-[60px] h-[60px] relative">
-                <Image 
-                 fill
-                 src={organization?.imageUrl!}
-                 alt="Organization"
-                 className="rounded-md object-cover"
-                />
-            </div>
-            <div className="space-y-1">
-                <p className="font-semibold text-xl">
-                    {organization?.name}
-                </p>
-                <div className="flex items-center text-xs text-muted-foreground">
-                    <CreditCard className="h-3 w-3 mr-1"/>
-                    {isPro ? "Pro" : "Free"}
-                </div>
-            </div>
-        </div>
+        <HStack gap={4} align="center">
+          <Avatar src={organization?.imageUrl} name={organization?.name} size={60} shape="rounded" />
+          <VStack gap={2}>
+            <Text type="large" weight="semibold">{organization?.name}</Text>
+            <Badge variant={isPro ? "success" : "neutral"} icon={<CreditCard className="size-3" />} label={isPro ? "Pro workspace" : "Free workspace"} />
+          </VStack>
+        </HStack>
     );
 };
 
 Info.Skeleton = function SkeletonInfo() {
     return (
-      <div className="flex items-center gap-x-4">
-        <div className="w-[60px] h-[60px] relative">
-          <Skeleton className="w-full h-full absolute" />
-        </div>
-        <div className="space-y-2">
-          <Skeleton className="h-10 w-[200px]" />
-          <div className="flex items-center">
-            <Skeleton className="h-4 w-4 mr-2" />
-            <Skeleton className="h-4 w-[100px]" />
-          </div>
-        </div>
-      </div>
+      <HStack gap={4} align="center">
+        <Skeleton width={60} height={60} radius={3} />
+        <VStack gap={2}><Skeleton width={200} height={24} /><Skeleton width={100} height={20} /></VStack>
+      </HStack>
     );
   };
