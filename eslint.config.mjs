@@ -8,5 +8,8 @@ export default defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    ".taskify-context/**",
+    "output/**",
+    "theme/taskify-nocturne.js",
   ]),
 ]);

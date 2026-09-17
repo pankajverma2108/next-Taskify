@@ -1,82 +1,78 @@
-@tailwind base;
+@import "@astryxdesign/core/reset.css";
+@import "@astryxdesign/core/astryx.css";
+@import "../theme/taskify-nocturne.css";
+
+@layer tw-preflight {
+  @tailwind base;
+}
+
 @tailwind components;
 @tailwind utilities;
 
-html,
-body,
-:root {
-  height: 100%;
-}
- 
-@layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 3.9%;
+html { color-scheme: dark; }
+html, body { min-height: 100%; }
+body { background: var(--color-background-body); color: var(--color-text-primary); }
+* { border-color: var(--color-border); }
+::selection { background: var(--color-accent-muted); color: var(--color-text-primary); }
 
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 3.9%;
- 
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 3.9%;
- 
-    --primary: 0 0% 9%;
-    --primary-foreground: 0 0% 98%;
- 
-    --secondary: 0 0% 96.1%;
-    --secondary-foreground: 0 0% 9%;
- 
-    --muted: 0 0% 96.1%;
-    --muted-foreground: 0 0% 45.1%;
- 
-    --accent: 0 0% 96.1%;
-    --accent-foreground: 0 0% 9%;
- 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-
-    --border: 0 0% 89.8%;
-    --input: 0 0% 89.8%;
-    --ring: 0 0% 3.9%;
- 
-    --radius: 0.5rem;
-  }
- 
-  .dark {
-    --background: 0 0% 3.9%;
-    --foreground: 0 0% 98%;
- 
-    --card: 0 0% 3.9%;
-    --card-foreground: 0 0% 98%;
- 
-    --popover: 0 0% 3.9%;
-    --popover-foreground: 0 0% 98%;
- 
-    --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 9%;
- 
-    --secondary: 0 0% 14.9%;
-    --secondary-foreground: 0 0% 98%;
- 
-    --muted: 0 0% 14.9%;
-    --muted-foreground: 0 0% 63.9%;
- 
-    --accent: 0 0% 14.9%;
-    --accent-foreground: 0 0% 98%;
- 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
- 
-    --border: 0 0% 14.9%;
-    --input: 0 0% 14.9%;
-    --ring: 0 0% 83.1%;
-  }
+.taskify-cover {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background-color: var(--color-background-muted);
+  background-image:
+    linear-gradient(105deg, color-mix(in srgb, var(--color-background-body) 88%, transparent), color-mix(in srgb, var(--color-background-body) 18%, transparent) 62%, transparent),
+    radial-gradient(circle at 82% 26%, color-mix(in srgb, var(--color-accent) 32%, transparent), transparent 24%),
+    url("/nocturne.svg");
+  background-position: center;
+  background-size: cover, cover, 100% 100%;
+  border: 1px solid color-mix(in srgb, var(--color-accent) 24%, var(--color-border));
+  box-shadow: inset 0 1px 0 color-mix(in srgb, white 8%, transparent), var(--shadow-low);
 }
- 
-@layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
+.taskify-cover::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: 0 0 0 auto;
+  width: 62%;
+  background:
+    radial-gradient(circle at 70% 48%, color-mix(in srgb, var(--color-accent) 55%, transparent), transparent 35%),
+    repeating-linear-gradient(132deg, color-mix(in srgb, var(--color-accent) 8%, transparent) 0 22px, color-mix(in srgb, var(--color-accent) 32%, transparent) 23px 25px);
+  clip-path: polygon(28% 0, 100% 0, 100% 100%, 0 100%);
+  pointer-events: none;
+}
+.taskify-cover::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  width: 170px;
+  height: 170px;
+  right: 8%;
+  top: 50%;
+  border: 2px solid color-mix(in srgb, var(--color-accent) 72%, transparent);
+  border-radius: 9999px;
+  transform: translateY(-50%);
+  box-shadow: 0 0 0 24px color-mix(in srgb, var(--color-accent) 7%, transparent), 0 0 0 56px color-mix(in srgb, var(--color-accent) 4%, transparent);
+  pointer-events: none;
+}
+.taskify-cover > * { position: relative; z-index: 1; }
+
+.taskify-dragging { box-shadow: var(--shadow-high); border-color: var(--color-accent); }
+.taskify-board-scroll { scrollbar-color: var(--color-border-emphasized) transparent; scrollbar-width: thin; }
+.taskify-board-shell #astryx-app-shell-main { overflow: hidden; }
+.taskify-theme-frame { min-height: 100dvh; }
+.taskify-auth-stage {
+  background:
+    radial-gradient(circle at 20% 20%, color-mix(in srgb, var(--color-accent) 16%, transparent), transparent 34%),
+    radial-gradient(circle at 78% 72%, color-mix(in srgb, var(--color-border-emphasized) 34%, transparent), transparent 30%),
+    linear-gradient(135deg, var(--color-background-body), var(--color-background-muted));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

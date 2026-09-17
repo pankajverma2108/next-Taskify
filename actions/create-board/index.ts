@@ -63,6 +63,12 @@ const handler = async (data: InputType): Promise<ReturnType> => {
         imageFullUrl,
         imageUserName,
         imageLinkHTML,
+        lists: {
+          create: ["Ideas", "Up next", "In motion", "Made it"].map((listTitle, order) => ({
+            title: listTitle,
+            order,
+          })),
+        },
       }
     });
 

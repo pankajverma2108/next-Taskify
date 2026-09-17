@@ -17,44 +17,45 @@ module.exports = {
     },
     extend: {
       colors: {
-        border: "hsl(var(--border))",
-        input: "hsl(var(--input))",
-        ring: "hsl(var(--ring))",
-        background: "hsl(var(--background))",
-        foreground: "hsl(var(--foreground))",
+        border: "var(--color-border)",
+        input: "var(--color-border)",
+        ring: "var(--focus-outline-color)",
+        background: "var(--color-background-body)",
+        foreground: "var(--color-text-primary)",
+        surface: "var(--color-background-surface)",
         primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
+          DEFAULT: "var(--color-accent)",
+          foreground: "var(--color-on-accent)",
         },
         secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
+          DEFAULT: "var(--color-background-muted)",
+          foreground: "var(--color-text-primary)",
         },
         destructive: {
-          DEFAULT: "hsl(var(--destructive))",
-          foreground: "hsl(var(--destructive-foreground))",
+          DEFAULT: "var(--color-error)",
+          foreground: "var(--color-on-error)",
         },
         muted: {
-          DEFAULT: "hsl(var(--muted))",
-          foreground: "hsl(var(--muted-foreground))",
+          DEFAULT: "var(--color-background-muted)",
+          foreground: "var(--color-text-secondary)",
         },
         accent: {
-          DEFAULT: "hsl(var(--accent))",
-          foreground: "hsl(var(--accent-foreground))",
+          DEFAULT: "var(--color-accent-muted)",
+          foreground: "var(--color-text-primary)",
         },
         popover: {
-          DEFAULT: "hsl(var(--popover))",
-          foreground: "hsl(var(--popover-foreground))",
+          DEFAULT: "var(--color-background-popover)",
+          foreground: "var(--color-text-primary)",
         },
         card: {
-          DEFAULT: "hsl(var(--card))",
-          foreground: "hsl(var(--card-foreground))",
+          DEFAULT: "var(--color-background-card)",
+          foreground: "var(--color-text-primary)",
         },
       },
       borderRadius: {
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
+        lg: "var(--radius-container)",
+        md: "var(--radius-element)",
+        sm: "var(--radius-inner)",
       },
       keyframes: {
         "accordion-down": {

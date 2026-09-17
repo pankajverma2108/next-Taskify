@@ -1,25 +1,11 @@
-import { Separator } from "@/components/ui/separator";
-
 import { Suspense } from "react";
-import { Info } from "./_components/info";
+import { VStack } from "@astryxdesign/core/VStack";
+import { Heading } from "@astryxdesign/core/Heading";
+import { Text } from "@astryxdesign/core/Text";
+import { HStack } from "@astryxdesign/core/HStack";
+import { Section } from "@astryxdesign/core/Section";
 import { BoardList } from "./_components/board-list";
-import { checkSubscription } from "@/lib/subscription";
-
-
-const OrganizationIdPage = async () => {
-    const isPro = await checkSubscription();
-
-    return (
-        <div className="w-full mb-20">
-           <Info isPro={isPro} />
-           <Separator className="my-4" />
-           <div className="px-2 md:px-4">
-            <Suspense fallback={<BoardList.Skeleton />}>
-            <BoardList />
-            </Suspense>
-           </div>
-        </div>
-    );
-};
-
-export default OrganizationIdPage;
+import { CreateBoardButton } from "@/components/create-board-button";
+export default function OrganizationPage() {
+  return <VStack gap={8} className="w-full"><HStack justify="between" wrap="wrap" gap={4}><VStack gap={2}><Text type="supporting">YOUR WORKSPACE</Text><Heading level={1}>Good things start here.</Heading><Text color="secondary">Pick up where you left off. Or make room for something new.</Text></VStack><CreateBoardButton /></HStack><Section className="taskify-cover rounded-lg" padding={8}><VStack gap={2}><Heading level={2}>A little structure.<br />A lot of possibility.</Heading><Text>Bring your ideas together, one project at a time.</Text></VStack></Section><Suspense fallback={<BoardList.Skeleton />}><BoardList /></Suspense></VStack>;
+}

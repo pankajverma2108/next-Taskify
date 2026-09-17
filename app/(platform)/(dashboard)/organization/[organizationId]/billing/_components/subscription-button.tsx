@@ -3,7 +3,7 @@
 import { toast } from "sonner";
 
 import { useAction } from "@/hooks/use-action";
-import { Button } from "@/components/ui/button";
+import { Button } from "@astryxdesign/core/Button";
 import { stripeRedirect } from "@/actions/stripe-redirect";
 import { useProModal } from "@/hooks/use-pro-modal";
 
@@ -35,11 +35,10 @@ export const SubscriptionButton = ({
 
     return (
         <Button
+          label={isPro ? "Manage subscription" : "Upgrade to Pro"}
           variant="primary"
           onClick={onClick}
-          disabled={isLoading}
-        >
-            {isPro ? "Manage subscription" : "Upgrade to pro"}
-        </Button>
+          isLoading={isLoading}
+        />
     )
 };
