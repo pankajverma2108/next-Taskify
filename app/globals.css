@@ -1,6 +1,4 @@
-@import "@astryxdesign/core/reset.css";
-@import "@astryxdesign/core/astryx.css";
-@import "../theme/taskify-nocturne.css";
+@import "../components/neopop/neopop.css";
 
 @layer tw-preflight {
   @tailwind base;
@@ -11,68 +9,87 @@
 
 html { color-scheme: dark; }
 html, body { min-height: 100%; }
-body { background: var(--color-background-body); color: var(--color-text-primary); }
+body { background: var(--color-background-body); color: var(--color-text-primary); margin: 0; }
 * { border-color: var(--color-border); }
-::selection { background: var(--color-accent-muted); color: var(--color-text-primary); }
+::selection { background: var(--np-yellow); color: var(--np-black-500); }
 
 .taskify-cover {
-  position: relative;
+  background-color: var(--np-black-300);
+  background-image:
+    linear-gradient(108deg, rgba(13, 13, 13, 0.96), rgba(13, 13, 13, 0.28) 68%),
+    repeating-linear-gradient(135deg, transparent 0 28px, rgba(255, 203, 69, 0.16) 29px 31px),
+    linear-gradient(90deg, var(--np-yellow) 0 25%, var(--np-green) 25% 50%, var(--np-blue) 50% 75%, var(--np-pink) 75%);
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  box-shadow: 6px 6px 0 var(--np-yellow-edge);
   isolation: isolate;
   overflow: hidden;
-  background-color: var(--color-background-muted);
-  background-image:
-    linear-gradient(105deg, color-mix(in srgb, var(--color-background-body) 88%, transparent), color-mix(in srgb, var(--color-background-body) 18%, transparent) 62%, transparent),
-    radial-gradient(circle at 82% 26%, color-mix(in srgb, var(--color-accent) 32%, transparent), transparent 24%),
-    url("/nocturne.svg");
-  background-position: center;
-  background-size: cover, cover, 100% 100%;
-  border: 1px solid color-mix(in srgb, var(--color-accent) 24%, var(--color-border));
-  box-shadow: inset 0 1px 0 color-mix(in srgb, white 8%, transparent), var(--shadow-low);
-}
-.taskify-cover::before {
-  content: "";
-  position: absolute;
-  z-index: 0;
-  inset: 0 0 0 auto;
-  width: 62%;
-  background:
-    radial-gradient(circle at 70% 48%, color-mix(in srgb, var(--color-accent) 55%, transparent), transparent 35%),
-    repeating-linear-gradient(132deg, color-mix(in srgb, var(--color-accent) 8%, transparent) 0 22px, color-mix(in srgb, var(--color-accent) 32%, transparent) 23px 25px);
-  clip-path: polygon(28% 0, 100% 0, 100% 100%, 0 100%);
-  pointer-events: none;
+  position: relative;
 }
 .taskify-cover::after {
+  border: 3px solid var(--np-white-500);
   content: "";
+  height: 132px;
   position: absolute;
-  z-index: 0;
-  width: 170px;
-  height: 170px;
   right: 8%;
   top: 50%;
-  border: 2px solid color-mix(in srgb, var(--color-accent) 72%, transparent);
-  border-radius: 9999px;
-  transform: translateY(-50%);
-  box-shadow: 0 0 0 24px color-mix(in srgb, var(--color-accent) 7%, transparent), 0 0 0 56px color-mix(in srgb, var(--color-accent) 4%, transparent);
-  pointer-events: none;
+  transform: translateY(-50%) rotate(45deg);
+  width: 132px;
+  z-index: -1;
 }
-.taskify-cover > * { position: relative; z-index: 1; }
-
-.taskify-dragging { box-shadow: var(--shadow-high); border-color: var(--color-accent); }
-.taskify-board-scroll { scrollbar-color: var(--color-border-emphasized) transparent; scrollbar-width: thin; }
-.taskify-board-shell #astryx-app-shell-main { overflow: hidden; }
+.taskify-dragging { border-color: var(--np-yellow) !important; box-shadow: 6px 6px 0 var(--np-yellow-edge); transform: rotate(0.75deg); }
+.taskify-board-scroll { scrollbar-color: var(--np-black-200) transparent; scrollbar-width: thin; }
+.taskify-board-shell .np-app-shell__main { overflow: hidden; }
 .taskify-theme-frame { min-height: 100dvh; }
 .taskify-auth-stage {
-  background:
-    radial-gradient(circle at 20% 20%, color-mix(in srgb, var(--color-accent) 16%, transparent), transparent 34%),
-    radial-gradient(circle at 78% 72%, color-mix(in srgb, var(--color-border-emphasized) 34%, transparent), transparent 30%),
-    linear-gradient(135deg, var(--color-background-body), var(--color-background-muted));
+  background-color: var(--np-black-500);
+  background-image: linear-gradient(135deg, transparent 0 72%, rgba(63, 111, 217, 0.22) 72%), repeating-linear-gradient(90deg, transparent 0 39px, rgba(255,255,255,.035) 40px);
 }
+.np-board-header { background: var(--np-black-400); border-bottom: 1px solid var(--color-border); }
+.np-board-workspace { background-image: linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px); background-size: 40px 40px; }
+.np-board-lane { background: rgba(18,18,18,.86); border-top: 5px solid var(--np-yellow); box-shadow: 3px 3px 0 rgba(128,102,35,.7); padding: 12px; }
+.np-board-lane:nth-child(3n + 2) { border-top-color: #89a5e3; box-shadow: 3px 3px 0 var(--np-blue-edge); }
+.np-board-lane:nth-child(3n + 3) { border-top-color: var(--np-green); box-shadow: 3px 3px 0 var(--np-green-edge); }
+.np-board-dropzone { transition: background 120ms ease, border-color 120ms ease; }
+.np-board-card { box-shadow: 3px 3px 0 rgba(255,255,255,.09); transition: border-color 120ms ease, box-shadow 120ms ease, transform 120ms ease; }
+.np-board-card:hover { border-color: rgba(255,255,255,.42); box-shadow: 3px 3px 0 var(--np-yellow-edge); transform: translateY(-1px); }
 
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    scroll-behavior: auto !important;
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
+.np-marketing-hero { min-height: calc(100dvh - 64px); overflow: hidden; padding-block: clamp(48px, 9vw, 120px) !important; position: relative; }
+.np-marketing-hero::before { background: var(--np-blue); content: ""; height: min(42vw, 560px); opacity: .18; position: absolute; right: -14vw; top: 12%; transform: rotate(45deg); width: min(42vw, 560px); }
+.np-live-mark { animation: np-pulse-square 1.6s ease-in-out infinite; background: var(--np-green); display: inline-block; height: 8px; width: 8px; }
+.np-hero-grid { align-items: end; display: grid; gap: clamp(32px, 6vw, 96px); grid-template-columns: minmax(0, 1.65fr) minmax(280px, .6fr); min-height: 54vh; position: relative; }
+.np-heading--display span { color: var(--np-yellow); }
+.np-hero-aside { border-left: 1px solid var(--color-border); padding-left: 24px; }
+.np-momentum-rail { display: grid; grid-template-columns: repeat(4, 1fr); }
+.np-momentum-rail span { color: var(--np-black-500); font-size: .64rem; font-weight: 900; letter-spacing: .12em; padding: 11px 12px; text-transform: uppercase; }
+.np-momentum-rail span:nth-child(1) { background: var(--np-yellow); }
+.np-momentum-rail span:nth-child(2) { background: var(--np-green); }
+.np-momentum-rail span:nth-child(3) { background: #89a5e3; }
+.np-momentum-rail span:nth-child(4) { background: var(--np-pink); color: var(--np-white-500); }
+.np-board-showcase { background: var(--np-white-300); color: var(--np-black-500); padding-block: clamp(64px, 9vw, 112px) !important; }
+.np-board-showcase .np-heading, .np-board-showcase .np-text { color: var(--np-black-500); }
+.np-board-showcase .np-text--secondary { color: rgba(13,13,13,.62); }
+.np-preview-board { display: grid; gap: 18px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.np-preview-lane { background: var(--np-black-500); border-top: 8px solid var(--np-yellow); box-shadow: 6px 6px 0 var(--np-yellow-edge); display: grid; gap: 20px; min-height: 390px; padding: 20px; }
+.np-preview-lane .np-text { color: var(--np-white-500); }
+.np-preview-lane .np-text--secondary { color: rgba(255,255,255,.52); }
+.np-preview-lane--blue { border-color: #89a5e3; box-shadow: 6px 6px 0 var(--np-blue-edge); }
+.np-preview-lane--green { border-color: var(--np-green); box-shadow: 6px 6px 0 var(--np-green-edge); }
+.np-preview-count { align-items: center; background: var(--np-white-500); color: var(--np-black-500); display: inline-flex; font-size: .7rem; font-weight: 900; height: 28px; justify-content: center; width: 28px; }
+.np-preview-task { background: var(--np-black-300); border: 1px solid var(--color-border); display: grid; gap: 28px; padding: 16px; }
+.np-promise-section { padding-block: clamp(64px, 9vw, 112px) !important; }
+.np-promise-grid { display: grid; gap: 1px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.np-promise { background: var(--np-black-400); border-top: 1px solid var(--color-border); display: grid; gap: 16px; min-height: 300px; padding: clamp(24px, 4vw, 48px); }
+.np-promise:nth-child(1) { border-top-color: var(--np-yellow); }
+.np-promise:nth-child(2) { border-top-color: #89a5e3; }
+.np-promise:nth-child(3) { border-top-color: var(--np-green); }
+.np-final-call { align-items: end; background: var(--np-black-300); border: 1px solid var(--color-border); box-shadow: 6px 6px 0 var(--np-pink-edge); display: flex; gap: 32px; justify-content: space-between; padding: clamp(28px, 5vw, 64px); }
+@keyframes np-pulse-square { 50% { box-shadow: 0 0 0 7px rgba(59,255,173,.12); transform: scale(.8); } }
+
+@media (max-width: 640px) {
+  .taskify-cover::after { height: 80px; opacity: .55; right: -20px; width: 80px; }
+  .np-hero-grid, .np-preview-board, .np-promise-grid { grid-template-columns: 1fr; }
+  .np-hero-grid { min-height: 0; }
+  .np-hero-aside { border-left: 0; border-top: 1px solid var(--color-border); padding-left: 0; padding-top: 24px; }
+  .np-momentum-rail { grid-template-columns: repeat(2, 1fr); }
+  .np-final-call { align-items: flex-start; flex-direction: column; }
 }

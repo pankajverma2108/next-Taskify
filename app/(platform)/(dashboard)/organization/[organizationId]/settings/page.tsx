@@ -1,8 +1,5 @@
+import { Heading, Section, Text, VStack } from "@/components/neopop";
 import { OrganizationProfile } from "@clerk/nextjs";
-import { Heading } from "@astryxdesign/core/Heading";
-import { Section } from "@astryxdesign/core/Section";
-import { Text } from "@astryxdesign/core/Text";
-import { VStack } from "@astryxdesign/core/VStack";
 
 const SettingsPage = () => {
     return (

@@ -1,7 +1,7 @@
+import { HStack } from "@/components/neopop";
 import { auth, clerkClient } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { OrganizationSwitcher, UserButton } from "@clerk/nextjs";
-import { HStack } from "@astryxdesign/core/HStack";
 import { db } from "@/lib/db";
 import { WorkspaceShell } from "@/components/workspace-shell";
 import { CreateBoardButton } from "@/components/create-board-button";

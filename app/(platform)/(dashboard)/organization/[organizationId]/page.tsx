@@ -1,9 +1,5 @@
+import { HStack, Heading, Section, Text, VStack } from "@/components/neopop";
 import { Suspense } from "react";
-import { VStack } from "@astryxdesign/core/VStack";
-import { Heading } from "@astryxdesign/core/Heading";
-import { Text } from "@astryxdesign/core/Text";
-import { HStack } from "@astryxdesign/core/HStack";
-import { Section } from "@astryxdesign/core/Section";
 import { BoardList } from "./_components/board-list";
 import { CreateBoardButton } from "@/components/create-board-button";
 export default function OrganizationPage() {

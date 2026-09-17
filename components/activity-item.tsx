@@ -1,11 +1,8 @@
+import { Avatar, HStack, Text, VStack } from "@/components/neopop";
 import { format } from "date-fns";
 import { AuditLog } from "@prisma/client"
 
 import { generateLogMessage } from "@/lib/generate-log-message";
-import { Avatar } from "@astryxdesign/core/Avatar";
-import { HStack } from "@astryxdesign/core/HStack";
-import { Text } from "@astryxdesign/core/Text";
-import { VStack } from "@astryxdesign/core/VStack";
 
 interface ActivityItemProps {
     data: AuditLog;

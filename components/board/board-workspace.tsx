@@ -1,21 +1,9 @@
 "use client";
 
+import { Button, Dialog, HStack, Heading, IconButton, Section, Selector, StatusDot, Text, TextArea, TextInput, Token, VStack } from "@/components/neopop";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { DragDropContext, Draggable, Droppable, type DropResult } from "@hello-pangea/dnd";
-import { Button } from "@astryxdesign/core/Button";
-import { IconButton } from "@astryxdesign/core/IconButton";
-import { Heading } from "@astryxdesign/core/Heading";
-import { Text } from "@astryxdesign/core/Text";
-import { VStack } from "@astryxdesign/core/VStack";
-import { HStack } from "@astryxdesign/core/HStack";
-import { Section } from "@astryxdesign/core/Section";
-import { TextInput } from "@astryxdesign/core/TextInput";
-import { TextArea } from "@astryxdesign/core/TextArea";
-import { Dialog } from "@astryxdesign/core/Dialog";
-import { Selector } from "@astryxdesign/core/Selector";
-import { Token } from "@astryxdesign/core/Token";
-import { StatusDot } from "@astryxdesign/core/StatusDot";
 import { LayoutGrid, List, Search, Plus, X, GripVertical, AlignLeft, ArrowUpRight, RotateCcw, Check, Pencil, Trash2 } from "lucide-react";
 import { BoardCommand, BoardData, BoardLane, BoardResult, BoardTask, moveInBoard, orderVersion } from "@/lib/board-model";
 import { BoardRealtimeStatus, useBoardRealtime } from "@/hooks/use-board-realtime";
@@ -166,8 +154,8 @@ export function BoardWorkspace({ initial, demo = false, mutate, orgId, refresh, 
     if (await submit(command)) { setComposer(null); setNewTitle(""); }
   }
 
-  return <VStack gap={0} className="h-full min-w-0">
-    <Section padding={6} className="w-full">
+  return <VStack gap={0} className="h-full min-w-0 np-board-workspace">
+    <Section padding={6} className="w-full np-board-header">
       <VStack gap={5}>
         <HStack justify="between" gap={4} align="start" wrap="wrap">
           <VStack gap={2}>
@@ -197,15 +185,15 @@ export function BoardWorkspace({ initial, demo = false, mutate, orgId, refresh, 
         <Droppable droppableId="board-lists" type="list" direction="horizontal" isDropDisabled={!!query}>
           {provided => <HStack as="ol" gap={4} align="start" height="100%" ref={provided.innerRef} {...provided.droppableProps}>
             {board.lists.map((lane, index) => <Draggable key={lane.id} draggableId={lane.id} index={index} isDragDisabled={!!query}>
-              {listProvided => <VStack as="li" gap={3} width={304} className="shrink-0" ref={listProvided.innerRef} {...listProvided.draggableProps}>
+              {listProvided => <VStack as="li" gap={3} width={304} className="shrink-0 np-board-lane" ref={listProvided.innerRef} {...listProvided.draggableProps}>
                 <HStack justify="between" gap={2}>
                   <HStack gap={2}><IconButton {...listProvided.dragHandleProps} label={`Move ${lane.title} list`} icon={<GripVertical className="size-4" />} variant="ghost" /><Text weight="semibold">{lane.title}</Text><Text color="secondary">{lane.cards.filter(matching).length}</Text></HStack>
                   <HStack gap={0}><IconButton label={`Rename ${lane.title}`} icon={<Pencil className="size-4" />} variant="ghost" onClick={() => openComposer({ kind: "rename-list", listId: lane.id, title: lane.title })} /><IconButton label={`Add task to ${lane.title}`} icon={<Plus className="size-4" />} variant="ghost" isDisabled={busy} onClick={() => openComposer({ kind: "task", listId: lane.id })} /></HStack>
                 </HStack>
                 <Droppable droppableId={lane.id} type="card" isDropDisabled={!!query}>
-                  {(cardsProvided, snapshot) => <VStack as="ol" gap={3} padding={2} minHeight={100} width="100%" ref={cardsProvided.innerRef} {...cardsProvided.droppableProps} className={`rounded-lg border ${snapshot.isDraggingOver ? "border-primary bg-accent" : "border-transparent"}`}>
+                  {(cardsProvided, snapshot) => <VStack as="ol" gap={3} padding={2} minHeight={100} width="100%" ref={cardsProvided.innerRef} {...cardsProvided.droppableProps} className={`np-board-dropzone border ${snapshot.isDraggingOver ? "border-primary bg-accent" : "border-transparent"}`}>
                     {lane.cards.filter(matching).map((card, cardIndex) => <Draggable key={card.id} draggableId={card.id} index={cardIndex} isDragDisabled={!!query}>
-                      {(cardProvided, cardSnapshot) => <VStack as="li" gap={3} padding={4} ref={cardProvided.innerRef} {...cardProvided.draggableProps} className={`w-full rounded-lg border bg-card ${cardSnapshot.isDragging ? "taskify-dragging" : "border-border"}`}>
+                      {(cardProvided, cardSnapshot) => <VStack as="li" gap={3} padding={4} ref={cardProvided.innerRef} {...cardProvided.draggableProps} className={`w-full border bg-card np-board-card ${cardSnapshot.isDragging ? "taskify-dragging" : "border-border"}`}>
                         <Button label={card.title} variant="ghost" className="w-full whitespace-normal text-left justify-start h-auto" onClick={() => updateUrl({ task: card.id })} />
                         {card.description && <Text color="secondary" maxLines={2}>{card.description}</Text>}
                         <HStack justify="between" gap={2}>
